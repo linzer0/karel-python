@@ -4,10 +4,10 @@ def generate_map(json_data):
     karel_world = [[0 for x in range(width)] for y in range(height)] #world created
     for data in json_data['diamond']:
         x, y = data
-        karel_world[x][y] = 2 # 2 = diamond
+        karel_world[x][y] = '+' # 2 = diamond
     for data in json_data['wall']:
         x, y = data
-        karel_world[x][y] = 1 # 1 = wall
+        karel_world[x][y] = '#' # 1 = wall
     x, y = json_data['karel']
     karel_world[x][y] = 'K'
     
@@ -24,6 +24,9 @@ def open_file(name):
 def print_world(world):
     for i in world:
         print(*i)
+def test():
+    mapp = generate_map(open_file('data.json'))
+    print_world(mapp)
 
-mapp = generate_map(open_file('data.json'))
-print_world(mapp)
+    
+    
