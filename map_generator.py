@@ -1,4 +1,5 @@
 import json
+from tkinter.filedialog import askopenfilename
 def generate_map(json_data):
     width, height = json_data['mapsize'] # map size set up
     karel_world = [[0 for x in range(width)] for y in range(height)] #world created
@@ -15,18 +16,18 @@ def generate_map(json_data):
 
     
 
-def open_file(name):
-    with open(name) as datafile:
-        obj = json.load(datafile)
-        return obj
-
-
+def open_file():
+    filename = askopenfilename()
+    if filename:
+        with open(filename, 'r') as f:
+            datastore = json.load(f)
+            return datastore
+        
 def print_world(world):
     for i in world:
         print(*i)
-def test():
-    mapp = generate_map(open_file('data.json'))
-    print_world(mapp)
 
-    
+def test():
+    mapp = generate_map(open_file())
+    print_world(mapp)
     
