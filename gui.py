@@ -8,11 +8,10 @@ class Gui:
         self.window.geometry("{0}x{1}+0+0".format(self.window.winfo_screenwidth(), self.window.winfo_screenheight()))
 
     def normal_size(self, width, height):
-        return 50;
-        
-
+        return 45;
     def __init__(self, window):
         self.window = window
+        self.world = ""
         self.canvas = ""
         self.height = 0
         self.width  = 0
@@ -51,24 +50,25 @@ class Gui:
             self.canvas.create_line([(0, i), (w, i)], tag='grid_line')
             self.canvas.create_line([(i, 0), (i, w)], tag='grid_line')
 
-    
 
     def render_map(self):
-        map_info = generate_map(open_file())
-        map_information = map_info;
-        height = len(map_info)
-        width = len(map_info[0])
-        self.height = height
-        self.width = width
-        self.create_canvas();
+        if(self.world == ""):
+            map_info = generate_map(open_file())
+            self.world = map_info
+        height = len(self.world)
+        width = len(self.world[0])
+        if(self.height == 0):
+            self.height = height
+            self.width = width
+            self.create_canvas();
         for column in range(height):
             for row in range(width):
-                self.render_object(map_info[column][row], column, row)
+                self.render_object(self.world[column][row], column, row)
      
     def create_canvas(self):
         self.size = self.normal_size(self.width, self.height)
         self.canvas = Canvas(self.window, height=self.height * self.size, width=self.width * self.size, bg='white')
-        #self.canvas.pack(side=TOP, expand=2)
+        self.canvas.pack(side=TOP, expand=2)
         self.canvas.pack(expand=2)
         self.canvas.bind('<Configure>', self.create_grid)
 
@@ -78,10 +78,12 @@ class Gui:
     def add_buttons(self):
         frame_left = Frame(self.window, bg='grey', bd = 2, width=50)
         load = Button(frame_left, text="Load", command=self.render_map)
+        update = Button(frame_left, text="Update", command=self.render_map)
         #move = Button(frame_left, text="Move", command=move)
         exit = Button(frame_left, text="Exit", command=self.quit)
         #move.pack()
         load.pack()
+        update.pack()
         exit.pack()
 
         frame_left.pack(side=LEFT)
@@ -89,6 +91,3 @@ class Gui:
 
     def change_title(self, new_title):
         self.window.title(new_title)
-    
-
-X = Gui(Tk()) 
