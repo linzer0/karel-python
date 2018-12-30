@@ -1,14 +1,15 @@
 from tkinter import *
+from threading import Thread
 from map_generator import *
 
-
-class Gui:
+class Gui():
 
     def full_screen(self):
         self.window.geometry("{0}x{1}+0+0".format(self.window.winfo_screenwidth(), self.window.winfo_screenheight()))
 
     def normal_size(self, width, height):
         return 45;
+
     def __init__(self, window):
         self.window = window
         self.world = ""
@@ -17,23 +18,26 @@ class Gui:
         self.width  = 0
         self.size = 0
         self.full_screen()
-        self.change_title("Parel")
+        self.window.title("Parel")
         self.add_buttons()
         self.create_canvas()
-        self.window.mainloop();
 
     def render_object(self, object_type, column, row):
         color = 'white'
+        column -= 1;
+        row -= 1;
         if object_type == '#':
             color = 'black'
         if object_type == '+':
             color='green'
         if object_type == 'K':
             color = 'red'
+            self.karel = (column, row)
         coordx = column * self.size
         coordy = row * self.size
         if object_type == 'K':
             self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=color)
+            print("RENDERED")
         else:
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=color)
 
@@ -78,16 +82,10 @@ class Gui:
     def add_buttons(self):
         frame_left = Frame(self.window, bg='grey', bd = 2, width=50)
         load = Button(frame_left, text="Load", command=self.render_map)
-        update = Button(frame_left, text="Update", command=self.render_map)
-        #move = Button(frame_left, text="Move", command=move)
+        #update = Button(frame_left, text="Update", command=self.move)
         exit = Button(frame_left, text="Exit", command=self.quit)
-        #move.pack()
         load.pack()
-        update.pack()
+        
+        #update.pack()
         exit.pack()
-
         frame_left.pack(side=LEFT)
-
-
-    def change_title(self, new_title):
-        self.window.title(new_title)
