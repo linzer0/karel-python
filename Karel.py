@@ -1,15 +1,16 @@
 from gui import Gui
 from map_generator import print_world
 from tkinter import *
+from threading import Thread
+
 
 class World():
     
     def __init__(self):
-        self.karel = (0, 0)
-
-     
-
-
+        self.map = ""
+        self.karel = ()
+    
+    
 
 
 class Robot():
@@ -28,15 +29,21 @@ class Robot():
         self.gui.world[newx][newy] = 'K';
         self.gui.render_map()
 
-    def __init__(self, x, y, direction):
-        self.x = x;
-        self.y = y;
-        self.direction = direction
+    def loop(self):
+        self.gui.window.mainloop()
+
+    def __init__(self):
         self.gui = Gui(Tk())
+        #selg.gui.w
+        self.direction = 1
+        self.x = 5
+        self.y = 0
+
     
     def move(self):
         oldx = self.x
         oldy = self.y
+        self.gui.render_object('K', self.x, self.y)
         if(self.direction == 0):
             self.x += 1;
         if(self.direction == 2):
@@ -45,13 +52,12 @@ class Robot():
             self.y += 1;
         if(self.direction == 3):
             self.y -= 1;
-        self.relocate(oldx, oldy, self.x, self.y)
-        print_world(self.gui.world)
+        self.gui.render_object('0', oldx, oldy)
+        self.gui.render_object('K', self.x, self.y)
+        for i in range(6000):
+            self.gui.window.update()
 
         
+    
+        
 
-XY = Robot(2, 2, 0);
-print(XY.x)
-XY.move()
-XY.move()
-print(XY.x)
