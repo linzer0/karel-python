@@ -71,24 +71,28 @@ class Robot():
     def move(self):
         oldx = self.x
         oldy = self.y
-        self.gui.render_object(self.block, self.x, self.y)
+        if self.front_is_clear() == False:
+            self.gui.bug()
 
-        self.world.karel_move(oldx, oldy, self.block, self.x, self.y)
-        if(self.direction == 0):
+        if self.direction == 0:
             self.x += 1;
-        if(self.direction == 2):
+        if self.direction == 2:
             self.x -= 1;
-        if(self.direction == 1):
+        if self.direction == 1:
             self.y += 1;
-        if(self.direction == 3):
+        if self.direction == 3:
             self.y -= 1;
 
-        self.gui.render_object(self.block, oldx, oldy)
-        self.block = self.world.world[self.x][self.y]  #Remembering previous and current box
-        self.gui.render_object('K', self.x, self.y)
-        self.world.karel_move(oldx, oldy, self.block, self.x, self.y)
+        self.world.world[oldx][oldy] = self.block; #Restoring previous box in WORLD
 
-        self.world.print_world()
+        self.gui.render_object(self.block, oldx, oldy) #Restoring previous box in GUI
+        self.block = self.world.world[self.x][self.y]  #Remembering previous and current box
+
+        self.world.world[self.x][self.y] = 'K'; #Moving Karel in World
+
+        self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
+
+        self.world.print_world() #Debuging only
 
         for i in range(700):
             self.gui.window.update()
@@ -96,12 +100,49 @@ class Robot():
     def turn_left(self):
         self.direction = (self.direction + 1) % 4;
     
-    #def beeper_is_present(self):
-    #    if self.world[self.x][self.y] == 
+    def next_possition(self):
+        curx = self.x
+        cury = self.y
+        if self.direction == 0:
+            curx += 1;
+        if self.direction == 2:
+            curx -= 1;
+        if self.direction == 1:
+            cury += 1;
+        if self.direction == 3:
+            cury -= 1;
+        return (curx, cury)
 
-    #def pick_beeper(self):
 
-    #def put_beeper(self):
+
+    def front_is_clear(self):
+        futx, futy = self.next_possition()
+        height = len(self.world.world)
+        width = len(self.world.world[0])
+        if futx >= height or futy >= width:
+            return False
+        if self.world.world[futx][futy] == '#':
+            return False
+        return True
+
+    def beeper_is_present(self):
+        return self.block == '+'
+
+    def pick_beeper(self):
+        if self.beeper_is_present() == True:
+            self.block = '0'
+            self.world.world[self.x][self.y] = '0'
+            self.gui.render_object('0', self.x, self.y)
+        else:
+            self.gui.bug()
+            
+
+    def put_beeper(self):
+        self.world.world[self.x][self.y] = '+'
+        self.block = '+'
+        self.gui.render_object('+', self.x, self.y)
+        self.gui.render_object('K', self.x, self.y)
+
 
         
 
