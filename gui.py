@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import *
 from threading import Thread
 from map_generator import *
@@ -10,6 +11,10 @@ class Gui():
 
     def normal_size(self, width, height):
         return 45;
+
+    def bug(self):
+        messagebox.showerror("Error", "Someting bad happen")
+        self.window.mainloop()
 
     def __init__(self, window):
         self.window = window
@@ -29,8 +34,6 @@ class Gui():
 
     def render_object(self, object_type, column, row):
         color = 'white'
-        #column -= 1;
-        #row -= 1;
         if object_type == '#':
             color = 'black'
         if object_type == '+':
@@ -41,7 +44,6 @@ class Gui():
         coordx = row * self.size
         coordy = column * self.size
         if object_type == 'K':
-            #self.render_png(row, column)
             self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=color)
         else:
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=color)
@@ -86,10 +88,8 @@ class Gui():
     def add_buttons(self):
         frame_left = Frame(self.window, bg='grey', bd = 2, width=50)
         load = Button(frame_left, text="Load", command=self.render_map)
-        #update = Button(frame_left, text="Update", command=self.move)
         exit = Button(frame_left, text="Exit", command=self.quit)
         load.pack()
         
-        #update.pack()
         exit.pack()
         frame_left.pack(side=LEFT)
