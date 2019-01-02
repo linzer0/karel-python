@@ -82,14 +82,16 @@ class Gui():
         self.canvas.pack(side=TOP, expand=2)
         self.canvas.bind('<Configure>', self.create_grid)
 
+
     def quit(self):
         self.window.quit()
         
     def add_buttons(self):
         frame_left = Frame(self.window, bg='grey', bd = 2, width=50)
         load = Button(frame_left, text="Load", command=self.render_map)
+        #create = Button(frame_left, text="Create", command=create_map)
         exit = Button(frame_left, text="Exit", command=self.quit)
         load.pack()
-        
+        #create.pack() 
         exit.pack()
         frame_left.pack(side=LEFT)
