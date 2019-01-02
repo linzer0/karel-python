@@ -88,7 +88,7 @@ class Robot():
 
         self.world.print_world() #Debuging only
 
-        for i in range(700):
+        for i in range(500):
             self.gui.window.update()
 
     def turn_left(self):

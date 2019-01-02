@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox, simpledialog
 from map_generator import *
 
 class Gui():
@@ -68,6 +68,16 @@ class Gui():
         for column in range(height):
             for row in range(width):
                 self.render_object(self.world[row][column], row, column)
+
+    def create_map(self):
+        height = Entry(self.window)
+        height.pack()
+        width = Entry(self.window)
+        width.pack()
+        Button(self.window, text="Sumbit").pack()
+        print(height.get(), width.pack())
+
+
      
     def create_canvas(self):
         self.size = self.normal_size(self.width, self.height)
@@ -81,9 +91,9 @@ class Gui():
     def add_buttons(self):
         frame_left = Frame(self.window, bg='grey', bd = 2, width=50)
         load = Button(frame_left, text="Load", command=self.render_map)
-        #create = Button(frame_left, text="Create", command=create_map)
+        create = Button(frame_left, text="Create", command=self.create_map)
         exit = Button(frame_left, text="Exit", command=self.quit)
         load.pack()
-        #create.pack() 
+        create.pack() 
         exit.pack()
         frame_left.pack(side=LEFT)

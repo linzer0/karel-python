@@ -7,7 +7,7 @@ def map_created(name_of_file="01_Task"):
     file_in_dir = returned.decode('utf-8').split('\n')
     return name_of_file in file_in_dir
 
-def launch_task(name_of_file="Task.py"):
+def launch_task(name_of_file="task.py"):
     subprocess.call("python3 {}".format(name_of_file), shell=True)
     subprocess.call("rm -rf 01_Task.json __pycache__", shell=True)
 

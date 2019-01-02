@@ -1,4 +1,4 @@
-from Karel import *
+from karel import *
 
 
 x = Robot()
@@ -9,4 +9,3 @@ x.move()
 
 
 
-x.wait()
