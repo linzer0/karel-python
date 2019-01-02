@@ -1,7 +1,5 @@
 from tkinter import *
 from tkinter import messagebox
-from PIL import *
-from threading import Thread
 from map_generator import *
 
 class Gui():
@@ -27,10 +25,6 @@ class Gui():
         self.window.title("Parel")
         self.add_buttons()
         self.create_canvas()
-
-    def render_png(self, row, column):
-        img = PhotoImage(file="karel.png")
-        self.canvas.create_image(500, 500, anchor=NW, image=img)
 
     def render_object(self, object_type, column, row):
         color = 'white'
@@ -61,7 +55,6 @@ class Gui():
             self.canvas.create_line([(0, i), (w, i)], tag='grid_line')
             self.canvas.create_line([(i, 0), (i, w)], tag='grid_line')
 
-
     def render_map(self):
         if(self.world == ""):
             map_info = generate_map(open_file())
@@ -81,7 +74,6 @@ class Gui():
         self.canvas = Canvas(self.window, height=self.height * self.size, width=self.width * self.size, bg='white')
         self.canvas.pack(side=TOP, expand=2)
         self.canvas.bind('<Configure>', self.create_grid)
-
 
     def quit(self):
         self.window.quit()

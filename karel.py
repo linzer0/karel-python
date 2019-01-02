@@ -2,7 +2,6 @@ from gui import Gui
 from time import sleep
 from tkinter import *
 
-
 class World():
     '''
     Class World 
@@ -23,7 +22,6 @@ class World():
                     x = i
                     y = j
                     break
-
         return (x, y)
      
     def __init__(self, world):
@@ -32,9 +30,6 @@ class World():
     def karel_move(self, oldx, oldy, olds, newx, newy):
         self.world[oldx][oldy] = self.world[newx][newy];
         self.world[newx][newy] = 'K';
-    
-    
-
 
 class Robot():
 
@@ -42,7 +37,7 @@ class Robot():
     # Directions #
     # 0 - right  #
     # 1 - up     #
-    # 2 - left   
+    # 2 - left   #
     # 3 - down   #
     ##############
 
@@ -66,7 +61,6 @@ class Robot():
         self.direction = 1
         self.x = tx
         self.y = ty
-
 
     def move(self):
         oldx = self.x
@@ -113,8 +107,6 @@ class Robot():
             cury -= 1;
         return (curx, cury)
 
-
-
     def front_is_clear(self):
         futx, futy = self.next_possition()
         height = len(self.world.world)
@@ -136,7 +128,6 @@ class Robot():
             self.gui.render_object('K', self.x, self.y)
         else:
             self.gui.bug()
-            
 
     def put_beeper(self):
         self.world.world[self.x][self.y] = '+'
@@ -144,14 +135,5 @@ class Robot():
         self.gui.render_object('+', self.x, self.y)
         self.gui.render_object('K', self.x, self.y)
 
-
-        
-
     def wait(self):
         self.gui.window.mainloop()
-
-
-        
-    
-        
-

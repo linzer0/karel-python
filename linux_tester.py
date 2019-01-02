@@ -1,8 +1,6 @@
 import map_creator
 import subprocess
 
-
-
 def map_created(name_of_file="01_Task"):
     name_of_file += ".json"
     returned = subprocess.check_output('ls')
