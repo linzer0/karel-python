@@ -11,14 +11,16 @@ def map_created(name_of_file="01_Task"):
 
 def launch_task(name_of_file="Task.py"):
     subprocess.call("python3 {}".format(name_of_file), shell=True)
-    
+    subprocess.call("rm -rf 01_Task.json __pycache__", shell=True)
 
-map_creator.start()
-if map_created():
-    print("Test 1 passed - Map created")
-    launch_task()
-else:
-    print("Test 1 not passed")
-    
+def start():
+    map_creator.start()
+    if map_created():
+        print("Test 1 passed - Map created")
+        launch_task()
+    else:
+        print("Test 1 not passed")
+
+start()
 
 
