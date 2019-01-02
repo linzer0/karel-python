@@ -2,15 +2,11 @@ from Karel import *
 
 
 x = Robot()
-x.move()
-x.move()
-x.move()
-x.move()
-x.move()
+while(x.front_is_clear()):
+    x.move()
+x.turn_left()
 x.move()
 
-x.move()
-x.move()
-x.move()
+
 
 x.wait()

@@ -131,8 +131,9 @@ class Robot():
     def pick_beeper(self):
         if self.beeper_is_present() == True:
             self.block = '0'
-            self.world.world[self.x][self.y] = '0'
+            self.world.world[self.x][self.y] = 'K'
             self.gui.render_object('0', self.x, self.y)
+            self.gui.render_object('K', self.x, self.y)
         else:
             self.gui.bug()
             
