@@ -68,6 +68,9 @@ class Gui():
         for column in range(height):
             for row in range(width):
                 self.render_object(self.world[row][column], row, column)
+    
+    def get_input(self):
+        return 
 
     def create_map(self):
         height = Entry(self.window)
