@@ -24,7 +24,8 @@ class Gui():
         self.full_screen()
         self.window.title("Parel")
         self.add_buttons()
-        self.create_canvas()
+        #self.create_canvas(self.width, self.height);
+        #self.create_canvas()
 
     def render_object(self, object_type, column, row):
         color = 'white'
@@ -54,6 +55,7 @@ class Gui():
         for i in range(0, h, self.size):
             self.canvas.create_line([(0, i), (w, i)], tag='grid_line')
             self.canvas.create_line([(i, 0), (i, w)], tag='grid_line')
+        #print("CALLED")
 
     def render_map(self):
         if(self.world == ""):
@@ -64,29 +66,33 @@ class Gui():
         if(self.height == 0):
             self.height = height
             self.width = width
-            self.create_canvas();
+            self.create_canvas(self.width, self.height);
         for column in range(height):
             for row in range(width):
                 self.render_object(self.world[row][column], row, column)
-    
+
     def get_input(self):
-        return 
+        self.result = (self.height_entry.get(), self.width_entry.get())
+        self.create_canvas(self.width_entry.get(), self.height_entry.get())
+        self.create_grid();
 
     def create_map(self):
-        height = Entry(self.window)
-        height.pack()
-        width = Entry(self.window)
-        width.pack()
-        Button(self.window, text="Sumbit").pack()
-        print(height.get(), width.pack())
+        x = StringVar()
+        y = StringVar()
+        self.height_entry = Entry(self.window, textvariable=x)
+        self.height_entry.pack()
+        self.width_entry = Entry(self.window, textvariable=y)
+        self.width_entry.pack()
+        Z = Button(self.window, text="Sumbit", command=self.get_input).pack()
 
 
      
-    def create_canvas(self):
-        self.size = self.normal_size(self.width, self.height)
-        self.canvas = Canvas(self.window, height=self.height * self.size, width=self.width * self.size, bg='white')
+    def create_canvas(self, _width, _height):
+        self.size = self.normal_size(_width, _height)
+        self.canvas = Canvas(self.window, height=_height * self.size, width=_width * self.size, bg='white')
         self.canvas.pack(side=TOP, expand=2)
         self.canvas.bind('<Configure>', self.create_grid)
+        #print("CALL")
 
     def quit(self):
         self.window.quit()

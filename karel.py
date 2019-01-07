@@ -51,12 +51,12 @@ class Robot():
 
         while(self.gui.world == ""):  #There we are waiiting for attaching the map
             self.gui.window.update()
-            sleep(1)
+            #sleep(1)
 
         self.world = World(self.gui.world)
         tx, ty = self.world.get_karel()
 
-        self.world.print_world()
+        #self.world.print_world()
 
         self.direction = 1
         self.x = tx
@@ -86,7 +86,7 @@ class Robot():
 
         self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
 
-        self.world.print_world() #Debuging only
+        #self.world.print_world() #Debuging only
 
         for i in range(500):
             self.gui.window.update()

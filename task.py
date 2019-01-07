@@ -8,4 +8,4 @@ x.turn_left()
 x.move()
 
 
-
+x.wait()
