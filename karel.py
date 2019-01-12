@@ -2,7 +2,6 @@ from gui import Gui
 from time import sleep
 from tkinter import *
 
-
 class World():
     '''
     Class World 
@@ -23,7 +22,6 @@ class World():
                     x = i
                     y = j
                     break
-
         return (x, y)
      
     def __init__(self, world):
@@ -32,9 +30,6 @@ class World():
     def karel_move(self, oldx, oldy, olds, newx, newy):
         self.world[oldx][oldy] = self.world[newx][newy];
         self.world[newx][newy] = 'K';
-    
-    
-
 
 class Robot():
 
@@ -42,7 +37,7 @@ class Robot():
     # Directions #
     # 0 - right  #
     # 1 - up     #
-    # 2 - left   
+    # 2 - left   #
     # 3 - down   #
     ##############
 
@@ -56,17 +51,16 @@ class Robot():
 
         while(self.gui.world == ""):  #There we are waiiting for attaching the map
             self.gui.window.update()
-            sleep(1)
+            #sleep(1)
 
         self.world = World(self.gui.world)
         tx, ty = self.world.get_karel()
 
-        self.world.print_world()
+        #self.world.print_world()
 
         self.direction = 1
         self.x = tx
         self.y = ty
-
 
     def move(self):
         oldx = self.x
@@ -88,13 +82,13 @@ class Robot():
         self.gui.render_object(self.block, oldx, oldy) #Restoring previous box in GUI
         self.block = self.world.world[self.x][self.y]  #Remembering previous and current box
 
-        self.world.world[self.x][self.y] = 'K'; #Moving Karel in World
+        #self.world.world[self.x][self.y] = 'K'; #Moving Karel in World
 
         self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
 
-        self.world.print_world() #Debuging only
+        #self.world.print_world() #Debuging only
 
-        for i in range(700):
+        for i in range(500):
             self.gui.window.update()
 
     def turn_left(self):
@@ -112,8 +106,6 @@ class Robot():
         if self.direction == 3:
             cury -= 1;
         return (curx, cury)
-
-
 
     def front_is_clear(self):
         futx, futy = self.next_possition()
@@ -136,7 +128,6 @@ class Robot():
             self.gui.render_object('K', self.x, self.y)
         else:
             self.gui.bug()
-            
 
     def put_beeper(self):
         self.world.world[self.x][self.y] = '+'
@@ -144,14 +135,5 @@ class Robot():
         self.gui.render_object('+', self.x, self.y)
         self.gui.render_object('K', self.x, self.y)
 
-
-        
-
     def wait(self):
         self.gui.window.mainloop()
-
-
-        
-    
-        
-
