@@ -4,7 +4,7 @@
 TO:DO
 1. Canvas + GUI. 			 +
 2. Generating World from GUI.		 +
-3. First Karel realisation	
+3. First Karel realisation		 +
 	1. Move command			 +
 	2. Turn left			 +
 	3. Put beeper			 +
