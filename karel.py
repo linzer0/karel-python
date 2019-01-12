@@ -82,7 +82,7 @@ class Robot():
         self.gui.render_object(self.block, oldx, oldy) #Restoring previous box in GUI
         self.block = self.world.world[self.x][self.y]  #Remembering previous and current box
 
-        self.world.world[self.x][self.y] = 'K'; #Moving Karel in World
+        #self.world.world[self.x][self.y] = 'K'; #Moving Karel in World
 
         self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
 
