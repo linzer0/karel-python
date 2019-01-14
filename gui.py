@@ -5,7 +5,7 @@ from map_generator import *
 class Gui():
 
     def full_screen(self):
-        self.window.geometry("{0}x{1}+0+0".format(self.window.winfo_screenwidth(), self.window.winfo_screenheight()))
+        self.window.geometry("{0}x{1}+0+0".format(self.window.winfo_screenwidth() - 200, self.window.winfo_screenheight() - 250))
 
     def normal_size(self, width, height):
         return 45;
@@ -20,6 +20,7 @@ class Gui():
         self.canvas = ""
         self.height = 0
         self.width  = 0
+        self.run_pressed = False
         self.size = 0
         self.color = ""
         self.full_screen()
@@ -117,6 +118,8 @@ class Gui():
     def create_map(self):
         if self.canvas != "":
             self.canvas.destroy()
+            self.palc.destroy()
+            self.pall.destroy()
 
         x = StringVar(self.window, value="10")
         y = StringVar(self.window, value="10")
@@ -166,15 +169,20 @@ class Gui():
         self.canvas.pack(side=TOP, expand=2)
         self.canvas.bind('<Configure>', self.create_grid)
 
+    def run(self):
+        self.run_pressed = True
+
     def quit(self):
         self.window.destroy()
         
     def add_buttons(self):
         frame_left = Frame(self.window, bg='grey', bd = 2, width=50)
-        load = Button(frame_left, text="Load", command=self.render_map)
-        create = Button(frame_left, text="Create", command=self.create_map)
-        save = Button(frame_left, text="Save", command=self.save_map)
-        exit = Button(frame_left, text="Exit", command=self.quit)
+        run = Button(frame_left, text="Run", command=self.run, width=5)
+        load = Button(frame_left, text="Load", command=self.render_map, width=5)
+        create = Button(frame_left, text="Create", command=self.create_map, width=5)
+        save = Button(frame_left, text="Save", command=self.save_map, width=5)
+        exit = Button(frame_left, text="Exit", command=self.quit, width=5)
+        run.pack()
         load.pack()
         save.pack()
         create.pack() 
