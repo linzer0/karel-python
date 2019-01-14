@@ -44,7 +44,7 @@ def map_to_json(world):
     f.write(son)
     f.close() # `()` was missing.
 
-    print(son)
+    #print(son)
 
 
 

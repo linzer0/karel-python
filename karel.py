@@ -52,6 +52,8 @@ class Robot():
         while(self.gui.world == ""):  #There we are waiiting for attaching the map
             self.gui.window.update()
             #sleep(1)
+        while(self.gui.run_pressed == False):  #There we are waiiting for attaching the map
+            self.gui.window.update()
 
         self.world = World(self.gui.world)
         tx, ty = self.world.get_karel()
