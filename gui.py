@@ -37,7 +37,7 @@ class Gui():
             self.karel = (column, row)
         coordx = row * self.size
         coordy = column * self.size
-        if object_type == 'K':
+        if object_type == 'K' or object_type == '#':
             self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=self.color)
         else:
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
@@ -58,6 +58,8 @@ class Gui():
     def render_map(self):
         if self.canvas != "":
             self.canvas.destroy()
+            self.palc.destroy()
+            self.pall.destroy()
 
         self.world = generate_map(open_file())
         self.height = len(self.world)
@@ -69,6 +71,19 @@ class Gui():
                 self.render_object(self.world[row][column], row, column)
 
     def palette(self):
+        self.pall = Frame(self.window, height=200, width=200)# bd = 100)
+        self.pall.pack(anchor='n')
+        self.palc = Canvas(self.pall, bg='gray', width=60, height=60)
+        self.palc.pack()
+        id = self.palc.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
+        self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
+        id = self.palc.create_rectangle((35, 10, 55, 30), fill="white", tags=('palette', 'paletteblue'))
+        self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("white"))
+        id = self.palc.create_rectangle((10, 35, 30, 55), fill="black", tags=('palette', 'paletteblack', 'paletteSelected'))
+        self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("black"))
+        id = self.palc.create_rectangle((35, 35, 55, 55), fill="green", tags=('palette', 'paletteblack', 'paletteSelected'))
+        self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("green"))
+        '''
         id = self.canvas.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
         self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
         id = self.canvas.create_rectangle((10, 35, 30, 55), fill="white", tags=('palette', 'paletteblue'))
@@ -78,6 +93,7 @@ class Gui():
         id = self.canvas.create_rectangle((10, 85, 30, 105), fill="green", tags=('palette', 'paletteblack', 'paletteSelected'))
         self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("green"))
         self.canvas.itemconfigure('palette', width=5)
+        '''
 
     def get_input(self):
 
