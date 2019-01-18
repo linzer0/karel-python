@@ -35,10 +35,10 @@ class Robot():
 
     ##############
     # Directions #
-    # 0 - right  #
-    # 1 - up     #
-    # 2 - left   #
-    # 3 - down   #
+    # 0 - down   #
+    # 1 - right  #
+    # 3 - left   #
+    # 2 - up     #
     ##############
 
 
@@ -59,7 +59,6 @@ class Robot():
         tx, ty = self.world.get_karel()
 
         #self.world.print_world()
-
         self.direction = 1
         self.x = tx
         self.y = ty
@@ -90,11 +89,12 @@ class Robot():
 
         #self.world.print_world() #Debuging only
 
-        for i in range(500):
+        for i in range(900):
             self.gui.window.update()
 
     def turn_left(self):
         self.direction = (self.direction + 1) % 4;
+        self.gui.direct = self.direction
     
     def next_possition(self):
         curx = self.x
