@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import messagebox, simpledialog
+from PIL import Image as IDK
 from map_generator import *
 
 class Gui():
@@ -20,6 +20,7 @@ class Gui():
         self.canvas = ""
         self.height = 0
         self.width  = 0
+        self.direct = 1
         self.run_pressed = False
         self.size = 0
         self.color = ""
@@ -27,21 +28,57 @@ class Gui():
         self.window.title("Parel")
         self.add_buttons()
 
-    def render_object(self, object_type, column, row):
-        self.color = 'white'
-        if object_type == '#':
-            self.color = 'black'
-        if object_type == '+':
-            self.color='green'
-        if object_type == 'K':
-            self.color = 'red'
-            self.karel = (column, row)
+    ##############
+    # Directions #
+    # 0 - down   #
+    # 1 - right  #
+    # 3 - left   #
+    # 2 - up     #
+    ##############
+    
+
+
+    def render_karel(self, column, row):
+
         coordx = row * self.size
         coordy = column * self.size
-        if object_type == 'K' or object_type == '#':
+
+        gradus = 0
+
+        directions = [(0, 270), (1, 0), (2, 90), (3, 180)]
+
+        for i in directions:
+            if self.direct == i[0]:
+                gradus = i[1]
+                break
+
+        pil_image = IDK.open("src/karel1.png").rotate(gradus)
+        pil_image.save("src/asrc.png")
+        image = PhotoImage(file="src/asrc.png")
+        image = image.subsample(2)
+        #image = image.zoom(2).subsample(5)
+        #image = ImageTk.PhotoImage(pil_image)
+        self.window.image = image
+        #self.window.lift(self.canvas)
+        #self.canvas.tag_raise(image)
+        self.canvas.create_image(coordx + 25, coordy + 25, image=image)
+
+
+
+    def render_object(self, object_type, column, row):
+        self.color = 'white'
+        coordx = row * self.size
+        coordy = column * self.size
+        if object_type == '#':
+            self.color = 'black'
             self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=self.color)
-        else:
+        if object_type == '+':
+            self.color='green'
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
+        if object_type == 'K':
+            self.render_karel(column, row)
+            self.color = 'red'
+            self.karel = (column, row)
 
     def create_grid(self, event=None):
         w = self.canvas.winfo_width() 
@@ -72,10 +109,14 @@ class Gui():
                 self.render_object(self.world[row][column], row, column)
 
     def palette(self):
+        #Pal init
         self.pall = Frame(self.window, height=200, width=200)# bd = 100)
         self.pall.pack(anchor='n')
         self.palc = Canvas(self.pall, bg='gray', width=60, height=60)
         self.palc.pack()
+        
+
+        #Color init
         id = self.palc.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
         id = self.palc.create_rectangle((35, 10, 55, 30), fill="white", tags=('palette', 'paletteblue'))
@@ -84,17 +125,6 @@ class Gui():
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("black"))
         id = self.palc.create_rectangle((35, 35, 55, 55), fill="green", tags=('palette', 'paletteblack', 'paletteSelected'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("green"))
-        '''
-        id = self.canvas.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
-        self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
-        id = self.canvas.create_rectangle((10, 35, 30, 55), fill="white", tags=('palette', 'paletteblue'))
-        self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("white"))
-        id = self.canvas.create_rectangle((10, 60, 30, 80), fill="black", tags=('palette', 'paletteblack', 'paletteSelected'))
-        self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("black"))
-        id = self.canvas.create_rectangle((10, 85, 30, 105), fill="green", tags=('palette', 'paletteblack', 'paletteSelected'))
-        self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("green"))
-        self.canvas.itemconfigure('palette', width=5)
-        '''
 
     def get_input(self):
 
@@ -118,8 +148,8 @@ class Gui():
     def create_map(self):
         if self.canvas != "":
             self.canvas.destroy()
-            self.palc.destroy()
-            self.pall.destroy()
+            self.palc = ""
+            self.pall = ""
 
         x = StringVar(self.window, value="10")
         y = StringVar(self.window, value="10")
