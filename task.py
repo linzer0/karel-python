@@ -2,19 +2,8 @@ from karel import *
 
 
 x = Robot()
-x.move()
-x.turn_left()
-x.move()
-
-x.turn_left()
-x.move()
-
-x.turn_left()
-x.move()
-
-x.turn_left()
-x.move()
-
-
+for i in range(5):
+    x.move()
+    x.put_beeper()
 
 x.wait()
