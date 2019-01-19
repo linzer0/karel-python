@@ -23,6 +23,7 @@ class Gui():
         self.direct = 1
         self.run_pressed = False
         self.size = 0
+        self.count = 0
         self.color = ""
         self.full_screen()
         self.window.title("Parel")
@@ -63,6 +64,20 @@ class Gui():
         #self.canvas.tag_raise(image)
         self.canvas.create_image(coordx + 25, coordy + 25, image=image)
 
+    def render_beeper(self, column, row):
+
+        coordx = row * self.size
+        coordy = column * self.size
+        x = []
+        image = PhotoImage(file="src/beeper.png")
+        image = image.subsample(2)
+        #image = image.zoom(2).subsample(5)
+        #image = ImageTk.PhotoImage(pil_image)
+        self.window.beeper = image
+        #self.window.lift(self.canvas)
+        #self.canvas.tag_raise(image)
+        self.canvas.create_image(coordx + 25, coordy + 25, image=self.window.beeper)
+
 
 
     def render_object(self, object_type, column, row):
@@ -74,8 +89,11 @@ class Gui():
             self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=self.color)
         if object_type == '+':
             self.color='green'
-            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
+            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
+            self.render_beeper(column, row)
+            #self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
         if object_type == 'K':
+            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
             self.render_karel(column, row)
             self.color = 'red'
             self.karel = (column, row)
