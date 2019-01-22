@@ -1,12 +1,7 @@
 from gui import Gui
-from time import sleep
 from tkinter import *
 
 class World():
-    '''
-    Class World 
-    Why? For easier access to map and manipulating with them
-    '''
 
     def print_world(self):
         for i in self.world:
@@ -30,17 +25,17 @@ class World():
     def karel_move(self, oldx, oldy, olds, newx, newy):
         self.world[oldx][oldy] = self.world[newx][newy];
         self.world[newx][newy] = 'K';
+        self.print_world()
 
 class Robot():
 
     ##############
     # Directions #
-    # 0 - right  #
-    # 1 - up     #
-    # 2 - left   #
-    # 3 - down   #
+    # 0 - down   #
+    # 1 - right  #
+    # 3 - left   #
+    # 2 - up     #
     ##############
-
 
     def loop(self):
         self.gui.window.mainloop()
@@ -51,7 +46,6 @@ class Robot():
 
         while(self.gui.world == ""):  #There we are waiiting for attaching the map
             self.gui.window.update()
-            #sleep(1)
         while(self.gui.run_pressed == False):  #There we are waiiting for attaching the map
             self.gui.window.update()
 
@@ -59,7 +53,6 @@ class Robot():
         tx, ty = self.world.get_karel()
 
         #self.world.print_world()
-
         self.direction = 1
         self.x = tx
         self.y = ty
@@ -89,12 +82,12 @@ class Robot():
         self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
 
         #self.world.print_world() #Debuging only
-
-        for i in range(500):
+        for i in range(1000):
             self.gui.window.update()
 
     def turn_left(self):
         self.direction = (self.direction + 1) % 4;
+        self.gui.direct = self.direction
     
     def next_possition(self):
         curx = self.x

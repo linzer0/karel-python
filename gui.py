@@ -1,5 +1,6 @@
 from tkinter import *
-from tkinter import messagebox, simpledialog
+from tkinter.messagebox import showerror
+from PIL import Image as IDK
 from map_generator import *
 
 class Gui():
@@ -7,7 +8,7 @@ class Gui():
     def full_screen(self):
         self.window.geometry("{0}x{1}+0+0".format(self.window.winfo_screenwidth() - 200, self.window.winfo_screenheight() - 250))
 
-    def normal_size(self, width, height):
+    def normal_size(self):
         return 45;
 
     def bug(self):
@@ -20,30 +21,67 @@ class Gui():
         self.canvas = ""
         self.height = 0
         self.width  = 0
+        self.direct = 1
         self.run_pressed = False
         self.size = 0
+        self.count = 1
         self.color = ""
         self.full_screen()
         self.window.title("Parel")
         self.add_buttons()
 
-    def render_object(self, object_type, column, row):
-        self.color = 'white'
-        if object_type == '#':
-            self.color = 'black'
-        if object_type == '+':
-            self.color='green'
-        if object_type == 'K':
-            self.color = 'red'
-            self.karel = (column, row)
+    def render_karel(self, column, row):
+
         coordx = row * self.size
         coordy = column * self.size
-        if object_type == 'K' or object_type == '#':
+
+        gradus = 0
+
+        directions = [(0, 270), (1, 0), (2, 90), (3, 180)]
+
+        for i in directions:
+            if self.direct == i[0]:
+                gradus = i[1]
+                break
+
+        pil_image = IDK.open("src/karel1.png").rotate(gradus)
+        pil_image.save("src/asrc.png")
+        image = PhotoImage(file="src/asrc.png")
+        image = image.subsample(2)
+        self.window.image = image
+        self.canvas.create_image(coordx + 23, coordy + 23, image=image)
+
+    def render_beeper(self, column, row):
+        coordx = row * self.size
+        coordy = column * self.size
+        #image = image.zoom(2).subsample(5)
+        #image = ImageTk.PhotoImage(pil_image)
+        self.canvas.beeper = (PhotoImage(file="src/beeper.png").subsample(2))
+        #self.window.lift(self.canvas)
+        #self.canvas.tag_raise(image)
+        self.canvas.create_image(coordx + 23, coordy + 23, image=self.canvas.beeper, tags='beeper')
+        #self.canvas.delete("all")
+
+    def render_object(self, object_type, column, row):
+        self.color = 'white'
+        coordx = row * self.size
+        coordy = column * self.size
+        if object_type == '#':
+            self.color = 'black'
             self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=self.color)
-        else:
+        if object_type == '+':
+            self.color='green'
+            #self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
+            #self.render_beeper(column, row)
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
+        if object_type == 'K':
+            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
+            self.render_karel(column, row)
+            self.color = 'red'
+            self.karel = (column, row)
 
     def create_grid(self, event=None):
+
         w = self.canvas.winfo_width() 
         h = self.canvas.winfo_height()
         self.canvas.delete('grid_line')
@@ -72,10 +110,14 @@ class Gui():
                 self.render_object(self.world[row][column], row, column)
 
     def palette(self):
+        #Pal init
+
         self.pall = Frame(self.window, height=200, width=200)# bd = 100)
         self.pall.pack(anchor='n')
         self.palc = Canvas(self.pall, bg='gray', width=60, height=60)
         self.palc.pack()
+        
+        #Color init
         id = self.palc.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
         id = self.palc.create_rectangle((35, 10, 55, 30), fill="white", tags=('palette', 'paletteblue'))
@@ -84,17 +126,6 @@ class Gui():
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("black"))
         id = self.palc.create_rectangle((35, 35, 55, 55), fill="green", tags=('palette', 'paletteblack', 'paletteSelected'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("green"))
-        '''
-        id = self.canvas.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
-        self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
-        id = self.canvas.create_rectangle((10, 35, 30, 55), fill="white", tags=('palette', 'paletteblue'))
-        self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("white"))
-        id = self.canvas.create_rectangle((10, 60, 30, 80), fill="black", tags=('palette', 'paletteblack', 'paletteSelected'))
-        self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("black"))
-        id = self.canvas.create_rectangle((10, 85, 30, 105), fill="green", tags=('palette', 'paletteblack', 'paletteSelected'))
-        self.canvas.tag_bind(id, "<Button-1>", lambda x: self.setColor("green"))
-        self.canvas.itemconfigure('palette', width=5)
-        '''
 
     def get_input(self):
 
@@ -162,7 +193,7 @@ class Gui():
         self.canvas.itemconfigure('paletteSelected', outline='#999999')
 
     def create_canvas(self):
-        self.size = self.normal_size(self.width, self.height)
+        self.size = self.normal_size()
         self.canvas = Canvas(self.window, height = self.height * self.size, width = self.width * self.size, bg='white')
         
         self.canvas.itemconfigure('palette', width=5)
@@ -173,6 +204,7 @@ class Gui():
         self.run_pressed = True
 
     def quit(self):
+
         self.window.destroy()
         
     def add_buttons(self):
@@ -182,9 +214,11 @@ class Gui():
         create = Button(frame_left, text="Create", command=self.create_map, width=5)
         save = Button(frame_left, text="Save", command=self.save_map, width=5)
         exit = Button(frame_left, text="Exit", command=self.quit, width=5)
+
         run.pack()
         load.pack()
         save.pack()
         create.pack() 
         exit.pack()
+
         frame_left.pack(side=LEFT)
