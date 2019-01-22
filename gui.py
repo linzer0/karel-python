@@ -7,7 +7,7 @@ class Gui():
     def full_screen(self):
         self.window.geometry("{0}x{1}+0+0".format(self.window.winfo_screenwidth() - 200, self.window.winfo_screenheight() - 250))
 
-    def normal_size(self, width, height):
+    def normal_size(self):
         return 45;
 
     def bug(self):
@@ -23,21 +23,11 @@ class Gui():
         self.direct = 1
         self.run_pressed = False
         self.size = 0
-        self.count = 0
+        self.count = 1
         self.color = ""
         self.full_screen()
         self.window.title("Parel")
         self.add_buttons()
-
-    ##############
-    # Directions #
-    # 0 - down   #
-    # 1 - right  #
-    # 3 - left   #
-    # 2 - up     #
-    ##############
-    
-
 
     def render_karel(self, column, row):
 
@@ -57,28 +47,19 @@ class Gui():
         pil_image.save("src/asrc.png")
         image = PhotoImage(file="src/asrc.png")
         image = image.subsample(2)
-        #image = image.zoom(2).subsample(5)
-        #image = ImageTk.PhotoImage(pil_image)
         self.window.image = image
-        #self.window.lift(self.canvas)
-        #self.canvas.tag_raise(image)
         self.canvas.create_image(coordx + 25, coordy + 25, image=image)
 
     def render_beeper(self, column, row):
-
         coordx = row * self.size
         coordy = column * self.size
-        x = []
-        image = PhotoImage(file="src/beeper.png")
-        image = image.subsample(2)
         #image = image.zoom(2).subsample(5)
         #image = ImageTk.PhotoImage(pil_image)
-        self.window.beeper = image
+        self.canvas.beeper = (PhotoImage(file="src/beeper.png").subsample(2))
         #self.window.lift(self.canvas)
         #self.canvas.tag_raise(image)
-        self.canvas.create_image(coordx + 25, coordy + 25, image=self.window.beeper)
-
-
+        self.canvas.create_image(coordx + 23, coordy + 23, image=self.canvas.beeper, tags='beeper')
+        #self.canvas.delete("all")
 
     def render_object(self, object_type, column, row):
         self.color = 'white'
@@ -90,8 +71,8 @@ class Gui():
         if object_type == '+':
             self.color='green'
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
-            self.render_beeper(column, row)
-            #self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
+            #self.render_beeper(column, row)
+            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
         if object_type == 'K':
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
             self.render_karel(column, row)
@@ -128,12 +109,12 @@ class Gui():
 
     def palette(self):
         #Pal init
+
         self.pall = Frame(self.window, height=200, width=200)# bd = 100)
         self.pall.pack(anchor='n')
         self.palc = Canvas(self.pall, bg='gray', width=60, height=60)
         self.palc.pack()
         
-
         #Color init
         id = self.palc.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
@@ -166,8 +147,8 @@ class Gui():
     def create_map(self):
         if self.canvas != "":
             self.canvas.destroy()
-            self.palc = ""
-            self.pall = ""
+            self.palc.destroy()
+            self.pall.destroy()
 
         x = StringVar(self.window, value="10")
         y = StringVar(self.window, value="10")
@@ -210,7 +191,7 @@ class Gui():
         self.canvas.itemconfigure('paletteSelected', outline='#999999')
 
     def create_canvas(self):
-        self.size = self.normal_size(self.width, self.height)
+        self.size = self.normal_size()
         self.canvas = Canvas(self.window, height = self.height * self.size, width = self.width * self.size, bg='white')
         
         self.canvas.itemconfigure('palette', width=5)
