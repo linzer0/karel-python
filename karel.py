@@ -1,12 +1,7 @@
 from gui import Gui
-from time import sleep
 from tkinter import *
 
 class World():
-    '''
-    Class World 
-    Why? For easier access to map and manipulating with them
-    '''
 
     def print_world(self):
         for i in self.world:
@@ -42,7 +37,6 @@ class Robot():
     # 2 - up     #
     ##############
 
-
     def loop(self):
         self.gui.window.mainloop()
 
@@ -52,7 +46,6 @@ class Robot():
 
         while(self.gui.world == ""):  #There we are waiiting for attaching the map
             self.gui.window.update()
-            #sleep(1)
         while(self.gui.run_pressed == False):  #There we are waiiting for attaching the map
             self.gui.window.update()
 
