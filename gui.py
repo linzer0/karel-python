@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter.messagebox import showerror
 from PIL import Image as IDK
 from map_generator import *
 
@@ -48,7 +49,7 @@ class Gui():
         image = PhotoImage(file="src/asrc.png")
         image = image.subsample(2)
         self.window.image = image
-        self.canvas.create_image(coordx + 25, coordy + 25, image=image)
+        self.canvas.create_image(coordx + 23, coordy + 23, image=image)
 
     def render_beeper(self, column, row):
         coordx = row * self.size
@@ -70,7 +71,7 @@ class Gui():
             self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=self.color)
         if object_type == '+':
             self.color='green'
-            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
+            #self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
             #self.render_beeper(column, row)
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
         if object_type == 'K':
@@ -80,6 +81,7 @@ class Gui():
             self.karel = (column, row)
 
     def create_grid(self, event=None):
+
         w = self.canvas.winfo_width() 
         h = self.canvas.winfo_height()
         self.canvas.delete('grid_line')
@@ -202,6 +204,7 @@ class Gui():
         self.run_pressed = True
 
     def quit(self):
+
         self.window.destroy()
         
     def add_buttons(self):
@@ -211,9 +214,11 @@ class Gui():
         create = Button(frame_left, text="Create", command=self.create_map, width=5)
         save = Button(frame_left, text="Save", command=self.save_map, width=5)
         exit = Button(frame_left, text="Exit", command=self.quit, width=5)
+
         run.pack()
         load.pack()
         save.pack()
         create.pack() 
         exit.pack()
+
         frame_left.pack(side=LEFT)
