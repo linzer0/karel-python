@@ -79,7 +79,7 @@ class Robot():
 
             self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
 
-            for i in range(1000):
+            for i in range(int(10000 / self.gui.speed)):
                 self.gui.window.update()
 
     def turn_left(self):

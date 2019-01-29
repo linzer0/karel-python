@@ -2,7 +2,9 @@ from karel import *
 
 
 x = Robot()
-x.move()
-x.move()
+while True:
+    x.move();
+    x.move()
+    x.turn_left()
 
 x.wait()
