@@ -16,6 +16,7 @@ class Gui():
         self.window.mainloop()
     
     def __init__(self, window):
+        self.speed = 10
         self.window = window
         self.world = ""
         self.canvas = ""
@@ -30,7 +31,7 @@ class Gui():
         self.window.title("Parel")
         self.add_buttons()
 
-    def render_karel(self, column, row):
+    def render_karel(self, canv, column, row):
 
         coordx = row * self.size
         coordy = column * self.size
@@ -48,7 +49,7 @@ class Gui():
         pil_image.save("src/asrc.png")
         image = PhotoImage(file="src/asrc.png").subsample(2)
         self.window.image = image
-        self.canvas.create_image(coordx + 21, coordy + 21, image=image)
+        canv.create_image(coordx + 21, coordy + 21, image=image)
 
     def render_beeper(self, column, row):
         coordx = row * self.size
@@ -61,7 +62,7 @@ class Gui():
         coordy = column * self.size
         if object_type == 'K':
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
-            self.render_karel(column, row)
+            self.render_karel(self.canvas, column, row)
             #self.world[column][row] = 'K'
             self.color = 'red'
             self.karel = (column, row)
@@ -118,13 +119,19 @@ class Gui():
         self.palc.pack()
         
         #Color init
-        id = self.palc.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
+        pil_image = IDK.open("src/karel1.png")
+        pil_image.save("src/asrc.png")
+        mage = PhotoImage(file="src/asrc.png").subsample(3)
+        self.window.mage = mage
+        id = self.palc.create_image(18, 18, image = mage)
+        #id = self.palc.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
+        #id = self.palc.create_text((10, 10, 30, 30), text="red", tags=('palette', 'paletteblue'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
         id = self.palc.create_rectangle((35, 10, 55, 30), fill="white", tags=('palette', 'paletteblue'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("white"))
         id = self.palc.create_rectangle((10, 35, 30, 55), fill="black", tags=('palette', 'paletteblack', 'paletteSelected'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("black"))
-        id = self.palc.create_rectangle((35, 35, 55, 55), fill="green", tags=('palette', 'paletteblack', 'paletteSelected'))
+        id = self.palc.create_oval((35, 35, 55, 55), fill="green", tags=('palette', 'paletteblack', 'paletteSelected'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("green"))
 
     def get_input(self):
@@ -145,6 +152,7 @@ class Gui():
         self.create_grid();
 
         self.canvas.bind("<Button-3>", self.point)
+
 
     def create_map(self):
         if self.canvas != "":
@@ -213,21 +221,26 @@ class Gui():
         self.run_pressed = True
 
     def quit(self):
-
         self.window.destroy()
+
+    def on_scale(self, val):
+        self.speed = int(val) + 10;
         
     def add_buttons(self):
-        frame_left = Frame(self.window, bg='grey', bd = 2, width=50)
-        run = Button(frame_left, text="Run", command=self.run, width=5)
+        frame_left = Frame(self.window, bd = 2, width=5)
+        run =  Button(frame_left, text="Run", command=self.run, width=5)
         load = Button(frame_left, text="Load", command=self.render_map, width=5)
         create = Button(frame_left, text="Create", command=self.create_map, width=5)
         save = Button(frame_left, text="Save", command=self.save_map, width=5)
         exit = Button(frame_left, text="Exit", command=self.quit, width=5)
+
+        scale = Scale(frame_left, from_= 1, to = 10,command=self.on_scale, orient=HORIZONTAL)
 
         run.pack()
         load.pack()
         save.pack()
         create.pack() 
         exit.pack()
+        scale.pack()
 
         frame_left.pack(side=LEFT)
