@@ -6,16 +6,24 @@
 ## TO:DO
 - [x] Canvas + GUI
 - [x] Generating World from GUI
-- [x] First Karel realisation 		 
+- [x] Karel basic functions: 		 
 	- [x] Move command			 
 	- [x] Turn left			 
-	- [x] Put beeper			
-	- [x] Check beeper			 
-	- [x] If wall			 
+	- [x] Put beeper
+	- [x] Pick beeper			
+	- [x] If beeper present			 
+	- [x] If front is clear			 
 	- [x] Turn Right			 
-- [X] Добавить реализацию скорости исполнителя(регулирование его)
-
-
+- [X] Speed control 
 ## How to use?
-Чтобы проверить в целом функционал можно запустить файл 'tester.py', которая создаст игровую карту и запустить программу.
-Где писать сам код для карела? В Файле 'Task.py', находится алгоритм для исполнителя.
+
+``` python
+from karel import *
+
+karel = Robot()       #Initialization
+karel.move()          #Call move function
+karel.turn_left()     #Turn Left function
+karel.pick_beeper()   #Take beeper 
+
+karel.wait()          #Main window won't close after running
+```
