@@ -59,7 +59,6 @@ class Gui():
         self.color = 'white'
         coordx = row * self.size
         coordy = column * self.size
-        print(object_type)
         if object_type == 'K':
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
             self.render_karel(column, row)

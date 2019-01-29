@@ -79,7 +79,6 @@ class Robot():
 
             self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
 
-            self.world.print_world() #Debuging only
             for i in range(1000):
                 self.gui.window.update()
 
