@@ -3,6 +3,7 @@
 
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/42e293bbfa3449c58e6cda9dc59d8c11)](https://www.codacy.com/app/linzer0/karel-python?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=linzer0/karel-python&amp;utm_campaign=Badge_Grade)
+<<<<<<< HEAD
 
 ## TO:DO
 
@@ -17,6 +18,7 @@
 		- [x] If front is clear			 
 		- [x] Turn Right			 
 		- [X] Speed control 
+
 ## How to use?
 
 ``` python
