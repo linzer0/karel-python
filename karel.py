@@ -22,10 +22,6 @@ class World():
     def __init__(self, world):
         self.world = world
 
-    def karel_move(self, oldx, oldy, olds, newx, newy):
-        self.world[oldx][oldy] = self.world[newx][newy];
-        self.world[newx][newy] = 'K';
-        self.print_world()
 
 class Robot():
 
@@ -42,6 +38,7 @@ class Robot():
 
     def __init__(self):
         self.block = 0
+        self.bugged = False
         self.gui = Gui(Tk())
 
         while(self.gui.world == ""):  #There we are waiiting for attaching the map
@@ -61,33 +58,35 @@ class Robot():
         oldx = self.x
         oldy = self.y
         if self.front_is_clear() == False:
+            self.bugged = True
             self.gui.bug()
+        elif self.bugged == False:
+            if self.direction == 0:
+                self.x += 1;
+            if self.direction == 2:
+                self.x -= 1;
+            if self.direction == 1:
+                self.y += 1;
+            if self.direction == 3:
+                self.y -= 1;
 
-        if self.direction == 0:
-            self.x += 1;
-        if self.direction == 2:
-            self.x -= 1;
-        if self.direction == 1:
-            self.y += 1;
-        if self.direction == 3:
-            self.y -= 1;
+            self.world.world[oldx][oldy] = self.block; #Restoring previous box in WORLD
 
-        self.world.world[oldx][oldy] = self.block; #Restoring previous box in WORLD
+            self.gui.render_object(self.block, oldx, oldy) #Restoring previous box in GUI
+            self.block = self.world.world[self.x][self.y]  #Remembering previous and current box
 
-        self.gui.render_object(self.block, oldx, oldy) #Restoring previous box in GUI
-        self.block = self.world.world[self.x][self.y]  #Remembering previous and current box
+            #self.world.world[self.x][self.y] = 'K'; #Moving Karel in World
 
-        #self.world.world[self.x][self.y] = 'K'; #Moving Karel in World
+            self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
 
-        self.gui.render_object('K', self.x, self.y) #Moving Karel to next box GUI
-
-        #self.world.print_world() #Debuging only
-        for i in range(1000):
-            self.gui.window.update()
+            self.world.print_world() #Debuging only
+            for i in range(1000):
+                self.gui.window.update()
 
     def turn_left(self):
-        self.direction = (self.direction + 1) % 4;
-        self.gui.direct = self.direction
+        if self.bugged == False:
+            self.direction = (self.direction + 1) % 4;
+            self.gui.direct = self.direction
     
     def next_possition(self):
         curx = self.x
@@ -106,29 +105,29 @@ class Robot():
         futx, futy = self.next_possition()
         height = len(self.world.world)
         width = len(self.world.world[0])
-        if futx >= height or futy >= width:
-            return False
-        if self.world.world[futx][futy] == '#':
+        if futx >= height or futy >= width or self.world.world[futx][futy] == -1:
             return False
         return True
 
-    def beeper_is_present(self):
-        return self.block == '+'
+    def beepers_present(self):
+        return int(self.block) >= 1;
 
     def pick_beeper(self):
-        if self.beeper_is_present() == True:
-            self.block = '0'
-            self.world.world[self.x][self.y] = 'K'
-            self.gui.render_object('0', self.x, self.y)
+        if self.beepers_present() == True and self.bugged == False:
+            self.block = max(self.world.world[self.x][self.y] - 1, 0)
+            self.world.world[self.x][self.y] = self.block;
+            #self.gui.render_object(self.world.world[self.x][self.y], self.x, self.y)
             self.gui.render_object('K', self.x, self.y)
         else:
+            self.bugged = True
             self.gui.bug()
 
     def put_beeper(self):
-        self.world.world[self.x][self.y] = '+'
-        self.block = '+'
-        self.gui.render_object('+', self.x, self.y)
-        self.gui.render_object('K', self.x, self.y)
+        if self.bugged == False:
+            self.world.world[self.x][self.y] += 1
+            self.block = self.world.world[self.x][self.y] 
+            self.gui.render_object(self.block, self.x, self.y)
+            self.gui.render_object('K', self.x, self.y)
 
     def wait(self):
         self.gui.window.mainloop()
