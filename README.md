@@ -1,15 +1,31 @@
 # karel-python
-Привет, это порт известного всем Karel на Python
-
-TO:DO
-1. Canvas + GUI. 			 +
-2. Generating World from GUI.		 -
-3. First Karel realisation
-	1. Move command			 +
-	2. Turn left			 +
-	3. Put beeper			 +
-	4. Check beeper			 +
-	5. If wall			 +
-	6. Turn Right			 -
+Привет, это порт известного всем **Karel + Python = Parel**
 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/42e293bbfa3449c58e6cda9dc59d8c11)](https://www.codacy.com/app/linzer0/karel-python?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=linzer0/karel-python&amp;utm_campaign=Badge_Grade)
+
+## TO:DO
+
+	- [x] Canvas + GUI
+	- [x] Generating World from GUI
+	- [x] Karel basic functions: 		 
+		- [x] Move command			 
+		- [x] Turn left			 
+		- [x] Put beeper
+		- [x] Pick beeper			
+		- [x] If beeper present			 
+		- [x] If front is clear			 
+		- [x] Turn Right			 
+		- [X] Speed control 
+## How to use?
+
+``` python
+from karel import *
+
+karel = Robot()       #Initialization
+karel.move()          #Call move function
+karel.turn_left()     #Turn Left function
+karel.pick_beeper()   #Take beeper 
+
+karel.wait()          #Main window won't close after running
+```

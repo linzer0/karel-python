@@ -51,11 +51,6 @@ class Gui():
         self.window.image = image
         canv.create_image(coordx + 21, coordy + 21, image=image)
 
-    def render_beeper(self, column, row):
-        coordx = row * self.size
-        coordy = column * self.size
-        self.canvas.beeper = (PhotoImage(file="src/beeper.png").subsample(2))
-
     def render_object(self, object_type, column, row):
         self.color = 'white'
         coordx = row * self.size
@@ -78,8 +73,6 @@ class Gui():
             #self.render_beeper(column, row)
         elif object_type == 0:
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
-
-
 
     def create_grid(self, event=None):
 
@@ -124,8 +117,6 @@ class Gui():
         mage = PhotoImage(file="src/asrc.png").subsample(3)
         self.window.mage = mage
         id = self.palc.create_image(18, 18, image = mage)
-        #id = self.palc.create_rectangle((10, 10, 30, 30), fill="red", tags=('palette', 'paletteblue'))
-        #id = self.palc.create_text((10, 10, 30, 30), text="red", tags=('palette', 'paletteblue'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("red"))
         id = self.palc.create_rectangle((35, 10, 55, 30), fill="white", tags=('palette', 'paletteblue'))
         self.palc.tag_bind(id, "<Button-1>", lambda x: self.setColor("white"))
