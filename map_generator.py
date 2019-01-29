@@ -5,11 +5,11 @@ def generate_map(json_data):
     width, height = json_data['mapsize'] # map size set up
     karel_world = [[0 for x in range(width)] for y in range(height)] #world created
     for data in json_data['diamond']:
-        x, y = data
-        karel_world[x][y] = '+' # 2 = diamond
+        x, y, z = data
+        karel_world[x][y] = z # 2 = diamond
     for data in json_data['wall']:
         x, y = data
-        karel_world[x][y] = '#' # 1 = wall
+        karel_world[x][y] = -1 # 1 = wall
     x, y = json_data['karel']
     karel_world[x][y] = 'K'
     return karel_world
@@ -30,12 +30,12 @@ def map_to_json(world):
     for i in range(n):
         for j in range(m):
             elem = world[i][j]
-            if elem == '#':
-                wall.append((i, j))
-            if elem == '+':
-                diamond.append((i, j))
             if elem == 'K':
                 karel = (i, j)
+            elif elem == -1:
+                wall.append((i, j))
+            elif elem > 0:
+                diamond.append((i, j, elem))
     son = json.dumps(({'wall':wall, 'diamond':diamond, 'mapsize':(n, m), 'karel':karel}), indent=4, sort_keys=True)
 
     f = asksaveasfile(mode='w', defaultextension=".json")

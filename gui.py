@@ -9,7 +9,7 @@ class Gui():
         self.window.geometry("{0}x{1}+0+0".format(self.window.winfo_screenwidth() - 200, self.window.winfo_screenheight() - 250))
 
     def normal_size(self):
-        return 45;
+        return 40;
 
     def bug(self):
         messagebox.showerror("Error", "Someting bad happen")
@@ -46,39 +46,39 @@ class Gui():
 
         pil_image = IDK.open("src/karel1.png").rotate(gradus)
         pil_image.save("src/asrc.png")
-        image = PhotoImage(file="src/asrc.png")
-        image = image.subsample(2)
+        image = PhotoImage(file="src/asrc.png").subsample(2)
         self.window.image = image
-        self.canvas.create_image(coordx + 23, coordy + 23, image=image)
+        self.canvas.create_image(coordx + 21, coordy + 21, image=image)
 
     def render_beeper(self, column, row):
         coordx = row * self.size
         coordy = column * self.size
-        #image = image.zoom(2).subsample(5)
-        #image = ImageTk.PhotoImage(pil_image)
         self.canvas.beeper = (PhotoImage(file="src/beeper.png").subsample(2))
-        #self.window.lift(self.canvas)
-        #self.canvas.tag_raise(image)
-        self.canvas.create_image(coordx + 23, coordy + 23, image=self.canvas.beeper, tags='beeper')
-        #self.canvas.delete("all")
 
     def render_object(self, object_type, column, row):
         self.color = 'white'
         coordx = row * self.size
         coordy = column * self.size
-        if object_type == '#':
-            self.color = 'black'
-            self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=self.color)
-        if object_type == '+':
-            self.color='green'
-            #self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
-            #self.render_beeper(column, row)
-            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill=self.color)
         if object_type == 'K':
             self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
             self.render_karel(column, row)
+            #self.world[column][row] = 'K'
             self.color = 'red'
             self.karel = (column, row)
+        elif object_type == -1:
+            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
+            self.color = 'black'
+            self.canvas.create_rectangle(coordx + 5, coordy + 5, coordx + self.size - 5, coordy + self.size - 5, fill=self.color)
+        elif object_type > 0:
+            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
+            self.color='green'
+            self.canvas.create_oval(coordx + 10, coordy + 10, coordx + self.size - 10, coordy + self.size - 10, fill=self.color)
+            self.canvas.create_text(coordx + 7, coordy + 7, text=self.world[column][row])
+            #self.render_beeper(column, row)
+        elif object_type == 0:
+            self.canvas.create_rectangle(coordx, coordy, coordx + self.size, coordy + self.size, fill='white')
+
+
 
     def create_grid(self, event=None):
 
@@ -168,14 +168,23 @@ class Gui():
        cory = y // self.size
        item = ''
        if self.color == 'green':
-           item = '+'
+           item = 1 
        if self.color == 'black':
-           item = '#';
+           item = -1;
        if self.color == 'red':
            item = 'K';
        if self.color == 'white':
-           item = '0'
-       self.world[cory][corx] = item;
+           item = 0
+       if item == 1:
+           if self.world[cory][corx] == 'K':
+               self.world[cory][corx] = 1
+           if self.world[cory][corx] > 0:
+               self.world[cory][corx] += 1;
+           else:
+               self.world[cory][corx] = 1
+       else:
+           self.world[cory][corx] = item;
+
        self.render_object(item, cory, corx)
 
     def point(self, event):
