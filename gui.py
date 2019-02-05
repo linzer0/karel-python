@@ -13,7 +13,7 @@ class Gui():
 
     def bug(self):
         messagebox.showerror("Error", "Someting bad happen")
-        self.window.mainloop()
+        exit()
     
     def __init__(self, window):
         self.speed = 10
@@ -186,7 +186,7 @@ class Gui():
        if item == 1:
            if self.world[cory][corx] == 'K':
                self.world[cory][corx] = 1
-           if self.world[cory][corx] > 0:
+           elif self.world[cory][corx] > 0:
                self.world[cory][corx] += 1;
            else:
                self.world[cory][corx] = 1
