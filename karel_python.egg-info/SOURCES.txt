@@ -1,0 +1,6 @@
+README.md
+setup.py
+karel_python.egg-info/PKG-INFO
+karel_python.egg-info/SOURCES.txt
+karel_python.egg-info/dependency_links.txt
+karel_python.egg-info/top_level.txt
