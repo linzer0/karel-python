@@ -38,7 +38,6 @@ class Robot():
 
     def __init__(self):
         self.block = 0
-        self.bugged = False
         self.gui = Gui(Tk())
 
         while(self.gui.world == ""):  #There we are waiiting for attaching the map
@@ -58,9 +57,8 @@ class Robot():
         oldx = self.x
         oldy = self.y
         if self.front_is_clear() == False:
-            self.bugged = True
-            self.gui.bug()
-        elif self.bugged == False:
+                self.gui.bug()
+        else:
             if self.direction == 0:
                 self.x += 1;
             if self.direction == 2:
@@ -83,9 +81,8 @@ class Robot():
                 self.gui.window.update()
 
     def turn_left(self):
-        if self.bugged == False:
-            self.direction = (self.direction + 1) % 4;
-            self.gui.direct = self.direction
+        self.direction = (self.direction + 1) % 4;
+        self.gui.direct = self.direction
     
     def next_possition(self):
         curx = self.x
@@ -112,21 +109,19 @@ class Robot():
         return int(self.block) >= 1;
 
     def pick_beeper(self):
-        if self.beepers_present() == True and self.bugged == False:
+        if self.beepers_present() == True:
             self.block = max(self.world.world[self.x][self.y] - 1, 0)
             self.world.world[self.x][self.y] = self.block;
             #self.gui.render_object(self.world.world[self.x][self.y], self.x, self.y)
             self.gui.render_object('K', self.x, self.y)
         else:
-            self.bugged = True
             self.gui.bug()
 
     def put_beeper(self):
-        if self.bugged == False:
-            self.world.world[self.x][self.y] += 1
-            self.block = self.world.world[self.x][self.y] 
-            self.gui.render_object(self.block, self.x, self.y)
-            self.gui.render_object('K', self.x, self.y)
+        self.world.world[self.x][self.y] += 1
+        self.block = self.world.world[self.x][self.y] 
+        self.gui.render_object(self.block, self.x, self.y)
+        self.gui.render_object('K', self.x, self.y)
 
     def wait(self):
         self.gui.window.mainloop()
